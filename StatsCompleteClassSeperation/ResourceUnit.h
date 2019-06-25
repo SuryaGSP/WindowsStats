@@ -11,39 +11,20 @@
 #include <pdhmsg.h>
 #include <Psapi.h>
 #endif
-#include "elalogger.h"
+#include "JustTrying.h"
+extern justTrying jInstance;
 
 #pragma comment(lib, "pdh.lib")
 
 extern ELALogger *logger;
 class ResourceUnit
 {
-  static PDH_HQUERY hQuery;
   PDH_HCOUNTER hcounter;
   PDH_FMT_COUNTERVALUE countervalue;
   double factor;
   std::string path;
   std::string counter;
   std::string instance;
-
-  static void GetConterValue()
-  {
-    DWORD status = PdhCollectQueryData(hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->info("PdhCollectQueryData %v", status);
-      return;
-    }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    status = PdhCollectQueryData(hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->info("PdhCollectQueryData %v", status);
-      return;
-    }
-    return;
-  }
 
   void SetCounter()
   {
@@ -102,28 +83,13 @@ public:
     return this;
   }
 
-  static void GetCount()
-  {
-    GetConterValue();
-  }
-
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(jInstance.hQuery, path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);
-      return;
-    }
-  }
-
-  static void Init()
-  {
-    DWORD status = PdhOpenQueryA(NULL, 0, &hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->log("PdhOpenQueryA %v", status);
       return;
     }
   }

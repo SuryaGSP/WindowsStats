@@ -155,6 +155,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="JustTrying.h" />
     <ClInclude Include="ProcessFilter.h" />
     <ClInclude Include="ResourceUnit.h" />
     <ClInclude Include="ResourceUnits.h" />

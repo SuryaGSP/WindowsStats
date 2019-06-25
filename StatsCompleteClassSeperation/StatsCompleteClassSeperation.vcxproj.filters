@@ -29,5 +29,8 @@
     <ClInclude Include="ResourceUnits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JustTrying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

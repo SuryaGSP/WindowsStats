@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "ResourceUnit.h"
+extern justTrying jInstance;
 template<class T>
 void PrintVector(std::vector<T> objects, std::string message)
 {
@@ -16,18 +17,20 @@ void PrintVector(std::vector<T> objects, std::string message)
 class ProcessFilter
 {
   std::string process, processPath;
-  std::vector<std::string> instances; std::vector<DWORD> pids;
+   std::vector<DWORD> pids;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
       ResourceUnit stat;
-      ResourceUnit::Init();
+//      ResourceUnit::Init();
+      jInstance.Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
-       ResourceUnit::GetCount();
+//       ResourceUnit::GetCount();
+      jInstance.GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
       {
@@ -151,6 +154,7 @@ class ProcessFilter
     }
   }
 public:
+  std::vector<std::string> instances;
   void Start(std::string path, std::string processName)
   {
     processPath = path;
