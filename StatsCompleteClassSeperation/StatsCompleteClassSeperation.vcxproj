@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProcessFilter.h" />
+    <ClInclude Include="QueryProcessing.h" />
     <ClInclude Include="ResourceUnit.h" />
     <ClInclude Include="ResourceUnits.h" />
   </ItemGroup>

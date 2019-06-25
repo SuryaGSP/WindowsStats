@@ -12,39 +12,19 @@
 #include <Psapi.h>
 #endif
 #include "elalogger.h"
-
+#include "QueryProcessing.h"
 #pragma comment(lib, "pdh.lib")
 
 extern ELALogger *logger;
 class ResourceUnit
 {
-  static PDH_HQUERY hQuery;
   PDH_HCOUNTER hcounter;
   PDH_FMT_COUNTERVALUE countervalue;
   double factor;
   std::string path;
   std::string counter;
   std::string instance;
-
-  static void GetConterValue()
-  {
-    DWORD status = PdhCollectQueryData(hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->info("PdhCollectQueryData %v", status);
-      return;
-    }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    status = PdhCollectQueryData(hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->info("PdhCollectQueryData %v", status);
-      return;
-    }
-    return;
-  }
-
+  QueryProcessing qProcessorLocalCopy;
   void SetCounter()
   {
     if (path == "")
@@ -59,24 +39,37 @@ class ResourceUnit
     }
     puts(path.c_str());
   }
-
 public:
+  ResourceUnit(QueryProcessing &qProcessorCopy) : factor(1)
+  {
+     qProcessorLocalCopy = qProcessorCopy;
+  }
   ResourceUnit() : factor(1)
   {
-  }
 
+  }
   double ResolveCount()
   {
     DWORD status = PdhGetFormattedCounterValue(hcounter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100, 0, &countervalue);
     if (status != ERROR_SUCCESS)
     {
+      if (status == PDH_INVALID_ARGUMENT)
+      {
+        std::cout << "arg";
+      }
+      else if (status == PDH_INVALID_DATA)
+      {
+        std::cout << "data";
+      }
+      else if(status == PDH_INVALID_HANDLE)
+      {
+        std::cout << "handl";
+      }
       logger->error("PdhGetFormattedCounterValue %v", status);
       return 0.0;
     }
     return countervalue.doubleValue * factor;
   }
-
-
 
   ResourceUnit* SetCounter(std::string countername)
   {
@@ -102,15 +95,10 @@ public:
     return this;
   }
 
-  static void GetCount()
-  {
-    GetConterValue();
-  }
-
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(qProcessorLocalCopy.GetHQuery(), path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);
@@ -118,15 +106,6 @@ public:
     }
   }
 
-  static void Init()
-  {
-    DWORD status = PdhOpenQueryA(NULL, 0, &hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->log("PdhOpenQueryA %v", status);
-      return;
-    }
-  }
 };
 
 class CPUUnit : public ResourceUnit
@@ -136,6 +115,11 @@ class CPUUnit : public ResourceUnit
     SetCounter("% Processor Time");
     SetFactor(1.0 / std::thread::hardware_concurrency());
     ResourceUnit::Start();
+  }
+public :
+  CPUUnit(QueryProcessing &qProcessorCopy):ResourceUnit(qProcessorCopy)
+  {
+
   }
 };
 
@@ -147,6 +131,11 @@ class RAMUnit : public ResourceUnit
     SetFactor(1.0 / (1024 * 1024));
     ResourceUnit::Start();
   }
+public:
+  RAMUnit(QueryProcessing &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  {
+
+  }
 };
 
 class DISKReadIOPSUnit : public ResourceUnit
@@ -156,6 +145,11 @@ class DISKReadIOPSUnit : public ResourceUnit
     SetCounter("IO Read Operations/sec");
     SetFactor(1.0);
     ResourceUnit::Start();
+  }
+public:
+  DISKReadIOPSUnit(QueryProcessing &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  {
+
   }
 };
 
@@ -167,6 +161,11 @@ class DISKWriteIOPSUnit : public ResourceUnit
     SetFactor(1.0);
     ResourceUnit::Start();
   }
+public:
+  DISKWriteIOPSUnit(QueryProcessing &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  {
+
+  }
 };
 
 class DISKReadBytesUnit : public ResourceUnit
@@ -177,6 +176,11 @@ class DISKReadBytesUnit : public ResourceUnit
     SetFactor(1.0 / (1024));
     ResourceUnit::Start();
   }
+public:
+  DISKReadBytesUnit(QueryProcessing &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  {
+
+  }
 };
 
 class DISKWriteBytesUnit : public ResourceUnit
@@ -186,5 +190,10 @@ class DISKWriteBytesUnit : public ResourceUnit
     SetCounter("IO Write Bytes/sec");
     SetFactor(1.0 / (1024));
     ResourceUnit::Start();
+  }
+public:
+  DISKWriteBytesUnit(QueryProcessing &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  {
+
   }
 };

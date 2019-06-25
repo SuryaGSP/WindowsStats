@@ -16,18 +16,21 @@ void PrintVector(std::vector<T> objects, std::string message)
 class ProcessFilter
 {
   std::string process, processPath;
-  std::vector<std::string> instances; std::vector<DWORD> pids;
+  std::vector<std::string> instances;
+  std::vector<DWORD> pids;
+  QueryProcessing qLocalCopy;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
       ResourceUnit stat;
-      ResourceUnit::Init();
+      //qProcessor.int()
+      qLocalCopy.Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
-       ResourceUnit::GetCount();
+      qLocalCopy.GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
       {
@@ -151,6 +154,14 @@ class ProcessFilter
     }
   }
 public:
+  ProcessFilter()
+  {
+
+  }
+  ProcessFilter(QueryProcessing &qProcessorLocalCopy)
+  {
+    qLocalCopy = qProcessorLocalCopy;
+  }
   void Start(std::string path, std::string processName)
   {
     processPath = path;
@@ -161,12 +172,16 @@ public:
     PrintVector(pids, "Filtered PIDS");
     GetInstances(process, instances);
     PrintVector(instances, "Unfiltered Instances");
-    FilterInstances(pids, instances);
+   // FilterInstances(pids, instances);
     PrintVector(instances, "Filtered Instances");
   }
   void GetProcessPath()
   {
     std::cout << process << processPath;
+  }
+  const std::vector<std::string>& GetInstance() const
+  { 
+    return instances; 
   }
 };
 
