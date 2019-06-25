@@ -2,6 +2,8 @@
 #include <Pdh.h>
 #include "ELALogger.h"
 extern ELALogger* logger;
+
+PDH_HQUERY hQuery;
 class justTrying
 {
   void GetConterValue()
@@ -23,7 +25,6 @@ class justTrying
     return;
   }
 public:
-  PDH_HQUERY hQuery;
   void GetCount()
   {
     GetConterValue();

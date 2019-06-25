@@ -2,15 +2,14 @@
 #include <iostream>
 #include "ResourceUnits.h"
 ELALogger *logger;
-justTrying jInstance;
-void GetValue(std::vector<ResourceUnits*> &resourceUnitsArray,ProcessFilter &pFilter)
+void GetValue(std::vector<ResourceUnits*> &resourceUnitsArray, ProcessFilter &pFilter, justTrying jTryingInstance)
 {
   std::vector<ResourceUnit*> resourceUnitArray;
-  double* result = new double[resourceUnitArray.size()];
+  double* result = new double[resourceUnitsArray.size()];
   int iInstance = 0;
-  for (int jInstance = 0; jInstance < resourceUnitArray.size(); jInstance++)
+  for (int jInstance1 = 0; jInstance1 < resourceUnitsArray.size(); jInstance1++)
   {
-    result[jInstance] = 0.0;
+    result[jInstance1] = 0.0;
   }
 
   for (auto &instance : pFilter.instances)
@@ -22,7 +21,7 @@ void GetValue(std::vector<ResourceUnits*> &resourceUnitsArray,ProcessFilter &pFi
       stat->Start();
       resourceUnitArray.push_back(stat);
     }
-    jInstance.GetCount();
+    jTryingInstance.GetCount();
     for (auto& res : resourceUnitArray)
     {
       result[iInstance] = result[iInstance] + res->ResolveCount();
@@ -46,8 +45,9 @@ int main()
   logger->Start();
   std::string path = "c:\\manageengine\\eventlog analyzer\\";
   std::string name = "java.exe"; 
+  justTrying jTrying1;
   ProcessFilter pFilter;
-  pFilter.Start(path,name);
+  pFilter.Start(path,name,jTrying1);
   std::vector<ResourceUnits*> res;
   ResourceUnits *unit = new DISKReadBytesUnits(pFilter);
   ResourceUnits * unit1 = new DISKWriteBytesUnits(pFilter);
@@ -60,7 +60,7 @@ int main()
   bool value = true;
   while (value)
   {
-    GetValue(res,pFilter);
+    GetValue(res,pFilter,jTrying1);
   }
   getchar();
   return 0;

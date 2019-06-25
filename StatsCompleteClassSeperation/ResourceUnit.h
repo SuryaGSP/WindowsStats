@@ -12,10 +12,9 @@
 #include <Psapi.h>
 #endif
 #include "JustTrying.h"
-extern justTrying jInstance;
 
 #pragma comment(lib, "pdh.lib")
-
+extern PDH_HQUERY hQuery;
 extern ELALogger *logger;
 class ResourceUnit
 {
@@ -44,6 +43,7 @@ class ResourceUnit
 public:
   ResourceUnit() : factor(1)
   {
+
   }
 
   double ResolveCount()
@@ -86,7 +86,7 @@ public:
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(jInstance.hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(hQuery, path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);

@@ -3,7 +3,6 @@
 #include <vector>
 #include <algorithm>
 #include "ResourceUnit.h"
-extern justTrying jInstance;
 template<class T>
 void PrintVector(std::vector<T> objects, std::string message)
 {
@@ -18,6 +17,7 @@ class ProcessFilter
 {
   std::string process, processPath;
    std::vector<DWORD> pids;
+   justTrying jtryingInstance;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
     std::vector<std::string> thisinstances;
@@ -25,12 +25,12 @@ class ProcessFilter
     {
       ResourceUnit stat;
 //      ResourceUnit::Init();
-      jInstance.Init();
+      jtryingInstance.Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
 //       ResourceUnit::GetCount();
-      jInstance.GetCount();
+      jtryingInstance.GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
       {
@@ -155,10 +155,11 @@ class ProcessFilter
   }
 public:
   std::vector<std::string> instances;
-  void Start(std::string path, std::string processName)
+  void Start(std::string path, std::string processName,justTrying jTrying)
   {
     processPath = path;
     process = processName;
+    jtryingInstance = jTrying;
     GetProcessIDs(pids);
     //PrintVector(pids, "Unfiltered PIDS");
     FilterProcessIDs(processPath, process, pids);
