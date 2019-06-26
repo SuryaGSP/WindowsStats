@@ -3,14 +3,17 @@
 class ResourceUnits
 {
   ProcessFilter pFilterCopy;
+protected:
+  justTrying jTrying;
 public:
-  ResourceUnits(ProcessFilter &pFilter)
+  ResourceUnits(ProcessFilter &pFilter,justTrying &jTryInstance)
   {
     pFilterCopy = pFilter;
+    jTrying = jTryInstance;
   }
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new ResourceUnit();
+    ResourceUnit *stat = new ResourceUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -19,14 +22,14 @@ public:
 class CPUUnits : public ResourceUnits
 {
 public:
-  CPUUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  CPUUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter, jTryInstance)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new CPUUnit();
+    ResourceUnit *stat = new CPUUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -35,13 +38,14 @@ public:
 class RAMUnits : public ResourceUnits
 {
 public:
-  RAMUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  RAMUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter,jTryInstance)
   {
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new RAMUnit();
+
+    ResourceUnit *stat = new RAMUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -50,14 +54,14 @@ public:
 class DISKReadIOPSUnits : public ResourceUnits
 {
 public:
-  DISKReadIOPSUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  DISKReadIOPSUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter, jTryInstance)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKReadIOPSUnit();
+    ResourceUnit *stat = new DISKReadIOPSUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -67,14 +71,14 @@ public:
 class DISKWriteIOPSUnits : public ResourceUnits
 {
 public:
-  DISKWriteIOPSUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  DISKWriteIOPSUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter, jTryInstance)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKWriteIOPSUnit();
+    ResourceUnit *stat = new DISKWriteIOPSUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -83,14 +87,14 @@ public:
 class DISKWriteBytesUnits : public ResourceUnits
 {
 public:
-  DISKWriteBytesUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  DISKWriteBytesUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter, jTryInstance)
   {
     pFilter.GetProcessPath();
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKWriteBytesUnit();
+    ResourceUnit *stat = new DISKWriteBytesUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }
@@ -99,14 +103,14 @@ public:
 class DISKReadBytesUnits : public ResourceUnits
 {
 public:
-  DISKReadBytesUnits(ProcessFilter &pFilter) : ResourceUnits(pFilter)
+  DISKReadBytesUnits(ProcessFilter &pFilter,justTrying &jTryInstance) : ResourceUnits(pFilter, jTryInstance)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKReadBytesUnit();
+    ResourceUnit *stat = new DISKReadBytesUnit(jTrying);
     stat->SetInstance(instance);
     return stat;
   }

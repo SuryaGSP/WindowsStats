@@ -3,7 +3,6 @@
 #include "ELALogger.h"
 extern ELALogger* logger;
 
-PDH_HQUERY hQuery;
 class justTrying
 {
   void GetConterValue()
@@ -25,6 +24,8 @@ class justTrying
     return;
   }
 public:
+  PDH_HQUERY hQuery;
+  int n;
   void GetCount()
   {
     GetConterValue();

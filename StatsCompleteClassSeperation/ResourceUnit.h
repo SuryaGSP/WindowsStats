@@ -14,7 +14,6 @@
 #include "JustTrying.h"
 
 #pragma comment(lib, "pdh.lib")
-extern PDH_HQUERY hQuery;
 extern ELALogger *logger;
 class ResourceUnit
 {
@@ -24,6 +23,7 @@ class ResourceUnit
   std::string path;
   std::string counter;
   std::string instance;
+  justTrying jTrying;
 
   void SetCounter()
   {
@@ -41,9 +41,14 @@ class ResourceUnit
   }
 
 public:
+  int x = 20;
   ResourceUnit() : factor(1)
   {
 
+  }
+  ResourceUnit(justTrying &jTryInstance) : factor(1)
+  {
+    jTrying = jTryInstance;
   }
 
   double ResolveCount()
@@ -86,7 +91,7 @@ public:
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(jTrying.hQuery, path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);
@@ -97,6 +102,15 @@ public:
 
 class CPUUnit : public ResourceUnit
 {
+public:
+  CPUUnit()
+  {
+
+  }
+  CPUUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+
+  }
   virtual void Start()
   {
     SetCounter("% Processor Time");
@@ -107,6 +121,15 @@ class CPUUnit : public ResourceUnit
 
 class RAMUnit : public ResourceUnit
 {
+public:
+  RAMUnit()
+  {
+
+  }
+  RAMUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+
+  }
   virtual void Start()
   {
     SetCounter("Working Set");
@@ -117,6 +140,15 @@ class RAMUnit : public ResourceUnit
 
 class DISKReadIOPSUnit : public ResourceUnit
 {
+public:
+  DISKReadIOPSUnit()
+  {
+
+  }
+  DISKReadIOPSUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+    
+  }
   virtual void Start()
   {
     SetCounter("IO Read Operations/sec");
@@ -127,6 +159,15 @@ class DISKReadIOPSUnit : public ResourceUnit
 
 class DISKWriteIOPSUnit : public ResourceUnit
 {
+public:
+  DISKWriteIOPSUnit()
+  {
+
+  }
+  DISKWriteIOPSUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+
+  }
   virtual void Start()
   {
     SetCounter("IO Write Operations/sec");
@@ -137,6 +178,15 @@ class DISKWriteIOPSUnit : public ResourceUnit
 
 class DISKReadBytesUnit : public ResourceUnit
 {
+public:
+  DISKReadBytesUnit()
+  {
+
+  }
+  DISKReadBytesUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+
+  }
   virtual void Start()
   {
     SetCounter("IO Read Bytes/sec");
@@ -147,6 +197,15 @@ class DISKReadBytesUnit : public ResourceUnit
 
 class DISKWriteBytesUnit : public ResourceUnit
 {
+public:
+  DISKWriteBytesUnit()
+  {
+
+  }
+  DISKWriteBytesUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  {
+
+  }
   virtual void Start()
   {
     SetCounter("IO Write Bytes/sec");

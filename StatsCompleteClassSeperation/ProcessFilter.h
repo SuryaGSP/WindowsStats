@@ -23,9 +23,10 @@ class ProcessFilter
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
-      ResourceUnit stat;
-//      ResourceUnit::Init();
+
       jtryingInstance.Init();
+      ResourceUnit stat(jtryingInstance);
+//      ResourceUnit::Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
@@ -130,7 +131,6 @@ class ProcessFilter
         }
         if (pid == 6020)
         {
-          std::cout << GetLastError();
           puts("aasdas");
         }
       }
@@ -155,7 +155,7 @@ class ProcessFilter
   }
 public:
   std::vector<std::string> instances;
-  void Start(std::string path, std::string processName,justTrying jTrying)
+  void Start(std::string &path, std::string &processName,justTrying &jTrying)
   {
     processPath = path;
     process = processName;
