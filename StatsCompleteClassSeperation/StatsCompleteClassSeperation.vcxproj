@@ -159,6 +159,7 @@
     <ClInclude Include="ProcessFilter.h" />
     <ClInclude Include="ResourceUnit.h" />
     <ClInclude Include="ResourceUnits.h" />
+    <ClInclude Include="Stats.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

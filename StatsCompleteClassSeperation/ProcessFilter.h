@@ -105,10 +105,6 @@ class ProcessFilter
 
       if (NULL != hProcess)
       {
-        if (pid == 7476)
-        {
-          puts("aasdas");
-        }
         HMODULE hMod;
         DWORD cbNeeded;
         if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded))
@@ -155,7 +151,11 @@ class ProcessFilter
   }
 public:
   std::vector<std::string> instances;
-  void Start(std::string &path, std::string &processName,justTrying &jTrying)
+  ProcessFilter()
+  {
+
+  }
+  ProcessFilter(std::string &path, std::string &processName,justTrying &jTrying)
   {
     processPath = path;
     process = processName;
