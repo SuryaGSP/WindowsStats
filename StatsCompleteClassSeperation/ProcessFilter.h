@@ -17,21 +17,21 @@ class ProcessFilter
 {
   std::string process, processPath;
    std::vector<DWORD> pids;
-   justTrying jtryingInstance;
+   QueryProcessor qProcessorInstance;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
 
-      jtryingInstance.Init();
-      ResourceUnit stat(jtryingInstance);
+      qProcessorInstance.Init();
+      ResourceUnit stat(qProcessorInstance);
 //      ResourceUnit::Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
 //       ResourceUnit::GetCount();
-      jtryingInstance.GetCount();
+      qProcessorInstance.GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
       {
@@ -125,10 +125,6 @@ class ProcessFilter
             }
           }
         }
-        if (pid == 6020)
-        {
-          puts("aasdas");
-        }
       }
       CloseHandle(hProcess);
     }
@@ -155,11 +151,11 @@ public:
   {
 
   }
-  ProcessFilter(std::string &path, std::string &processName,justTrying &jTrying)
+  ProcessFilter(std::string &path, std::string &processName,QueryProcessor &qProcessorCopy)
   {
     processPath = path;
     process = processName;
-    jtryingInstance = jTrying;
+    qProcessorInstance = qProcessorCopy;
     GetProcessIDs(pids);
     //PrintVector(pids, "Unfiltered PIDS");
     FilterProcessIDs(processPath, process, pids);

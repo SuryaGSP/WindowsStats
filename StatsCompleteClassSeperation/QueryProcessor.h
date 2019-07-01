@@ -3,19 +3,11 @@
 #include "ELALogger.h"
 extern ELALogger* logger;
 
-class justTrying
+class QueryProcessor
 {
   void GetConterValue()
   {
     DWORD status = PdhCollectQueryData(hQuery);
-    if (status != ERROR_SUCCESS)
-    {
-      logger->info("PdhCollectQueryData %v", status);
-      return;
-    }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    status = PdhCollectQueryData(hQuery);
     if (status != ERROR_SUCCESS)
     {
       logger->info("PdhCollectQueryData %v", status);

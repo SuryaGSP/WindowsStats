@@ -11,7 +11,7 @@
 #include <pdhmsg.h>
 #include <Psapi.h>
 #endif
-#include "JustTrying.h"
+#include "QueryProcessor.h"
 
 #pragma comment(lib, "pdh.lib")
 extern ELALogger *logger;
@@ -23,7 +23,7 @@ class ResourceUnit
   std::string path;
   std::string counter;
   std::string instance;
-  justTrying jTrying;
+  QueryProcessor qProcessorInstance;
 
   void SetCounter()
   {
@@ -37,7 +37,7 @@ class ResourceUnit
       str << "\\Process(" << instance << ")\\" << counter;
       path = str.str();
     }
-    puts(path.c_str());
+//    puts(path.c_str());
   }
 
 public:
@@ -46,9 +46,9 @@ public:
   {
 
   }
-  ResourceUnit(justTrying &jTryInstance) : factor(1)
+  ResourceUnit(QueryProcessor &qProcessorCopy) : factor(1)
   {
-    jTrying = jTryInstance;
+    qProcessorInstance = qProcessorCopy;
   }
 
   double ResolveCount()
@@ -81,7 +81,10 @@ public:
     path = counterpath;
     return this;
   }
-
+  std::string GetCounterPath()
+  {
+    return path;
+  }
   ResourceUnit* SetFactor(double factor)
   {
     this->factor = factor;
@@ -91,7 +94,7 @@ public:
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(jTrying.hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(qProcessorInstance.hQuery, path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);
@@ -107,7 +110,7 @@ public:
   {
 
   }
-  CPUUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  CPUUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
 
   }
@@ -126,7 +129,7 @@ public:
   {
 
   }
-  RAMUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  RAMUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
 
   }
@@ -145,7 +148,7 @@ public:
   {
 
   }
-  DISKReadIOPSUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  DISKReadIOPSUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
     
   }
@@ -164,7 +167,7 @@ public:
   {
 
   }
-  DISKWriteIOPSUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  DISKWriteIOPSUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
 
   }
@@ -183,7 +186,7 @@ public:
   {
 
   }
-  DISKReadBytesUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  DISKReadBytesUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
 
   }
@@ -202,7 +205,7 @@ public:
   {
 
   }
-  DISKWriteBytesUnit(justTrying &jTryInstance) :ResourceUnit(jTryInstance)
+  DISKWriteBytesUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
   {
 
   }
