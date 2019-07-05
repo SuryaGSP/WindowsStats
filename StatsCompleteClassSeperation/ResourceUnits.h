@@ -2,13 +2,11 @@
 #include "ProcessFilter.h"
 class ResourceUnits
 {
-  ProcessFilter pFilterInstance;
 protected:
   QueryProcessor queryProcessorInstance;
 public:
-  ResourceUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy)
+  ResourceUnits(QueryProcessor &qProcessorCopy)
   {
-    pFilterInstance = pFilterCopy;
     queryProcessorInstance = qProcessorCopy;
   }
   virtual ResourceUnit* GetStat(std::string instance)
@@ -22,7 +20,7 @@ public:
 class CPUUnits : public ResourceUnits
 {
 public:
-  CPUUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  CPUUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
 
   }
@@ -38,7 +36,7 @@ public:
 class RAMUnits : public ResourceUnits
 {
 public:
-  RAMUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  RAMUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
   }
 
@@ -54,7 +52,7 @@ public:
 class DISKReadIOPSUnits : public ResourceUnits
 {
 public:
-  DISKReadIOPSUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  DISKReadIOPSUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
 
   }
@@ -71,7 +69,7 @@ public:
 class DISKWriteIOPSUnits : public ResourceUnits
 {
 public:
-  DISKWriteIOPSUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  DISKWriteIOPSUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
 
   }
@@ -87,7 +85,7 @@ public:
 class DISKWriteBytesUnits : public ResourceUnits
 {
 public:
-  DISKWriteBytesUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  DISKWriteBytesUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
   }
 
@@ -102,7 +100,7 @@ public:
 class DISKReadBytesUnits : public ResourceUnits
 {
 public:
-  DISKReadBytesUnits(ProcessFilter &pFilterCopy,QueryProcessor &qProcessorCopy) : ResourceUnits(pFilterCopy, qProcessorCopy)
+  DISKReadBytesUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
   {
 
   }

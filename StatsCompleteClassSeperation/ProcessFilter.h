@@ -17,20 +17,18 @@ class ProcessFilter
 {
   std::string process, processPath;
    std::vector<DWORD> pids;
-   QueryProcessor qProcessorInstance;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
+    QueryProcessor qProcessorInstance;
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
 
       qProcessorInstance.Init();
       ResourceUnit stat(qProcessorInstance);
-//      ResourceUnit::Init();
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
-//       ResourceUnit::GetCount();
       qProcessorInstance.GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
@@ -151,11 +149,10 @@ public:
   {
 
   }
-  ProcessFilter(std::string &path, std::string &processName,QueryProcessor &qProcessorCopy)
+  ProcessFilter(std::string &path, std::string &processName)
   {
     processPath = path;
     process = processName;
-    qProcessorInstance = qProcessorCopy;
     GetProcessIDs(pids);
     //PrintVector(pids, "Unfiltered PIDS");
     FilterProcessIDs(processPath, process, pids);
