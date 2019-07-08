@@ -3,15 +3,15 @@
 class ResourceUnits
 {
 protected:
-  QueryProcessor queryProcessorInstance;
+  QueryProcessor *queryProcessor;
 public:
-  ResourceUnits(QueryProcessor &qProcessorCopy)
+  ResourceUnits(QueryProcessor *queryProcessor)
   {
-    queryProcessorInstance = qProcessorCopy;
+    this->queryProcessor = queryProcessor;
   }
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new ResourceUnit(queryProcessorInstance);
+    ResourceUnit *stat = new ResourceUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -20,14 +20,14 @@ public:
 class CPUUnits : public ResourceUnits
 {
 public:
-  CPUUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  CPUUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new CPUUnit(queryProcessorInstance);
+    ResourceUnit *stat = new CPUUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -36,14 +36,14 @@ public:
 class RAMUnits : public ResourceUnits
 {
 public:
-  RAMUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  RAMUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
 
-    ResourceUnit *stat = new RAMUnit(queryProcessorInstance);
+    ResourceUnit *stat = new RAMUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -52,14 +52,14 @@ public:
 class DISKReadIOPSUnits : public ResourceUnits
 {
 public:
-  DISKReadIOPSUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  DISKReadIOPSUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKReadIOPSUnit(queryProcessorInstance);
+    ResourceUnit *stat = new DISKReadIOPSUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -69,14 +69,14 @@ public:
 class DISKWriteIOPSUnits : public ResourceUnits
 {
 public:
-  DISKWriteIOPSUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  DISKWriteIOPSUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKWriteIOPSUnit(queryProcessorInstance);
+    ResourceUnit *stat = new DISKWriteIOPSUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -85,13 +85,13 @@ public:
 class DISKWriteBytesUnits : public ResourceUnits
 {
 public:
-  DISKWriteBytesUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  DISKWriteBytesUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKWriteBytesUnit(queryProcessorInstance);
+    ResourceUnit *stat = new DISKWriteBytesUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }
@@ -100,14 +100,14 @@ public:
 class DISKReadBytesUnits : public ResourceUnits
 {
 public:
-  DISKReadBytesUnits(QueryProcessor &qProcessorCopy) : ResourceUnits(qProcessorCopy)
+  DISKReadBytesUnits(QueryProcessor *queryProcessor) : ResourceUnits(queryProcessor)
   {
 
   }
 
   virtual ResourceUnit* GetStat(std::string instance)
   {
-    ResourceUnit *stat = new DISKReadBytesUnit(queryProcessorInstance);
+    ResourceUnit *stat = new DISKReadBytesUnit(queryProcessor);
     stat->SetInstance(instance);
     return stat;
   }

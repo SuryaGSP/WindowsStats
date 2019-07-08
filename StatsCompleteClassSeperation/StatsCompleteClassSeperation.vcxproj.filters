@@ -29,10 +29,10 @@
     <ClInclude Include="ResourceUnits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Stats.h">
+    <ClInclude Include="QueryProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QueryProcessor.h">
+    <ClInclude Include="ResourceUnitsHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

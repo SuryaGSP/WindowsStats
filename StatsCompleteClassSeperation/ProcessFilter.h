@@ -15,21 +15,19 @@ void PrintVector(std::vector<T> objects, std::string message)
 }
 class ProcessFilter
 {
-  std::string process, processPath;
+  std::string processName, processPath;
    std::vector<DWORD> pids;
   void FilterInstances(const std::vector<DWORD>& pids, std::vector<std::string>& thatinstances)
   {
-    QueryProcessor qProcessorInstance;
     std::vector<std::string> thisinstances;
     for (auto &instance : thatinstances)
     {
-
-      qProcessorInstance.Init();
+      QueryProcessor *qProcessorInstance = new QueryProcessor();
       ResourceUnit stat(qProcessorInstance);
       stat.SetCounter("ID Process");
       stat.SetInstance(instance);
       stat.Start();
-      qProcessorInstance.GetCount();
+      qProcessorInstance->GetCount();
       int pid = static_cast<int>(stat.ResolveCount());
       if (std::find(pids.begin(), pids.end(), pid) != pids.end())
       {
@@ -100,7 +98,10 @@ class ProcessFilter
     for (DWORD pid : thatpids)
     {
       HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
-
+      if (pid == 7968)
+      {
+        std::cout << "java";
+      }
       if (NULL != hProcess)
       {
         HMODULE hMod;
@@ -149,22 +150,22 @@ public:
   {
 
   }
-  ProcessFilter(std::string &path, std::string &processName)
+  ProcessFilter(std::string path, std::string name)
   {
     processPath = path;
-    process = processName;
+    processName = name;
     GetProcessIDs(pids);
     //PrintVector(pids, "Unfiltered PIDS");
-    FilterProcessIDs(processPath, process, pids);
+    FilterProcessIDs(processPath, processName, pids);
     PrintVector(pids, "Filtered PIDS");
-    GetInstances(process, instances);
+    GetInstances(processName, instances);
     PrintVector(instances, "Unfiltered Instances");
     FilterInstances(pids, instances);
     PrintVector(instances, "Filtered Instances");
   }
   void GetProcessPath()
   {
-    std::cout << process << processPath;
+    std::cout << processName << processPath;
   }
 };
 

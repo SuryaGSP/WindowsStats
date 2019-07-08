@@ -23,7 +23,7 @@ class ResourceUnit
   std::string path;
   std::string counter;
   std::string instance;
-  QueryProcessor qProcessorInstance;
+  QueryProcessor *queryProcessor;
 
   void SetCounter()
   {
@@ -42,13 +42,9 @@ class ResourceUnit
 
 public:
   int x = 20;
-  ResourceUnit() : factor(1)
+  ResourceUnit(QueryProcessor *queryProcessor) : factor(1)
   {
-
-  }
-  ResourceUnit(QueryProcessor &qProcessorCopy) : factor(1)
-  {
-    qProcessorInstance = qProcessorCopy;
+    this->queryProcessor = queryProcessor;
   }
 
   double ResolveCount()
@@ -94,7 +90,7 @@ public:
   virtual void Start()
   {
     SetCounter();
-    DWORD status = PdhAddCounterA(qProcessorInstance.hQuery, path.c_str(), 0, &hcounter);
+    DWORD status = PdhAddCounterA(queryProcessor->hQuery, path.c_str(), 0, &hcounter);
     if (status != ERROR_SUCCESS)
     {
       logger->log("PdhAddCounterA %v", status);
@@ -106,11 +102,7 @@ public:
 class CPUUnit : public ResourceUnit
 {
 public:
-  CPUUnit()
-  {
-
-  }
-  CPUUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  CPUUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
 
   }
@@ -125,11 +117,8 @@ public:
 class RAMUnit : public ResourceUnit
 {
 public:
-  RAMUnit()
-  {
 
-  }
-  RAMUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  RAMUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
 
   }
@@ -144,11 +133,7 @@ public:
 class DISKReadIOPSUnit : public ResourceUnit
 {
 public:
-  DISKReadIOPSUnit()
-  {
-
-  }
-  DISKReadIOPSUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  DISKReadIOPSUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
     
   }
@@ -163,11 +148,7 @@ public:
 class DISKWriteIOPSUnit : public ResourceUnit
 {
 public:
-  DISKWriteIOPSUnit()
-  {
-
-  }
-  DISKWriteIOPSUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  DISKWriteIOPSUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
 
   }
@@ -182,11 +163,7 @@ public:
 class DISKReadBytesUnit : public ResourceUnit
 {
 public:
-  DISKReadBytesUnit()
-  {
-
-  }
-  DISKReadBytesUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  DISKReadBytesUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
 
   }
@@ -201,11 +178,8 @@ public:
 class DISKWriteBytesUnit : public ResourceUnit
 {
 public:
-  DISKWriteBytesUnit()
-  {
 
-  }
-  DISKWriteBytesUnit(QueryProcessor &qProcessorCopy) :ResourceUnit(qProcessorCopy)
+  DISKWriteBytesUnit(QueryProcessor *queryProcessor) :ResourceUnit(queryProcessor)
   {
 
   }

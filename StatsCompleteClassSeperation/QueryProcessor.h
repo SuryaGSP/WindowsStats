@@ -17,13 +17,12 @@ class QueryProcessor
   }
 public:
   PDH_HQUERY hQuery;
-  int n;
   void GetCount()
   {
     GetConterValue();
   }
 
-  void Init()
+  QueryProcessor()
   {
     DWORD status = PdhOpenQueryA(NULL, 0, &hQuery);
     if (status != ERROR_SUCCESS)
